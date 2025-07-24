@@ -1,0 +1,1 @@
+export {}; // Esto obliga a TypeScript a tratarlo como módulo.
