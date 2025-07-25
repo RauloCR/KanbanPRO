@@ -16,6 +16,8 @@ export interface BoardData {
     columnOrder: string[];
 }
 
+// DATOS DE PRUEBA
+
 export const initialData: BoardData = {
     tasks: {
         'task-1': { id: 'task-1', title: 'Configurar proyecto', description: 'Inicializar estructura React' },

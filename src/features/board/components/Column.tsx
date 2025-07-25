@@ -1,7 +1,7 @@
 import React from "react";
 import { Droppable } from "@hello-pangea/dnd";
 import { TaskCard } from "./TaskCard";
-import { Task } from "../mockData";
+import { Task } from "../../../types/boardTypes";
 
 interface Props {
     column: {
