@@ -6,8 +6,9 @@ export const fetchTasks = async (boardId: string): Promise<Task[]> => {
     return response.data;
 };
 
-export const createTask = async (columnId: string, data: Partial<Task>) => {
-    return axios.post(`/columns/${columnId}/tasks`, data);
+export const createTask = async (columnId: string, title: string): Promise<Task> => {
+    const response = await axios.post(`/columns/${columnId}/tasks`, { title });
+    return response.data;
 };
 
 export const updateTaskPosition = async (

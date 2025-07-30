@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from "react";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { Column as ColumnComponent } from "./Column";
-import { BoardData } from "../../../types/boardTypes";
+import { BoardData,Task } from "../../../types/boardTypes";
 import { getBoardData } from "../../../api/boardAPI"
-
 
 export const Board = () => {
     const [boardData, setBoardData] = useState<BoardData | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        console.log("🚀 Board component mounted");
         const fetchData = async () => {
             try {
                 const data = await getBoardData();
@@ -22,6 +22,30 @@ export const Board = () => {
         };
         fetchData()
     }, []);
+
+    const handleTaskCreated = (newTask: Task, columnId: string) => {
+        setBoardData((prev) => {
+            if (!prev) return null;
+
+            const updatedColumn = {
+                ...prev.columns[columnId],
+                taskIds: [...prev.columns[columnId].taskIds, newTask.id],
+            };
+
+            return {
+                ...prev,
+                tasks: {
+                    ...prev.tasks,
+                    [newTask.id]: newTask,
+                },
+                columns: {
+                    ...prev.columns,
+                    [columnId]: updatedColumn,
+                },
+                columnOrder: prev.columnOrder,
+            };
+        });
+    };
 
     const onDragEnd = (result: DropResult) => {
         if (!boardData) return;
@@ -77,7 +101,14 @@ export const Board = () => {
                 {boardData && boardData.columnOrder.map((columnId) => {
                     const column = boardData.columns[columnId];
                     const tasks = column.taskIds.map((taskId) => boardData.tasks[taskId]);
-                    return <ColumnComponent key={column.id} column={column} tasks={tasks} />;
+                    return (
+                        <ColumnComponent
+                            key={column.id}
+                            column={column}
+                            tasks={tasks}
+                            onTaskCreated={handleTaskCreated}
+                        />
+                    );
                 })}
             </div>
         </DragDropContext>
